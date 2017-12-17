@@ -6,9 +6,14 @@ import time
 import pigpio
 import os
 
-pin = [4,5,13]       #pins being used for servo signal to ESCs
+#change pins used for sending data to motors
+pin = [2, 3, 4]         #[left,right,up/down] set to any GPIO pin
+
+#change if polarity of the motor is flipped 
+gain = [0.5, 0.5, 0.5]  #[left,right,up/down] values between -1 to 1 (default 0.5)
+
+#other variables
 dir = [128,128,128]
-gain = 0.5          #gain to lower power (max 1)
 motor = [1500, 1500, 1500]
 
 #object initialization
@@ -20,7 +25,7 @@ if not pi.connected:
 
 #socket binding - should be rasp pi's IP and 8008 port
 #Change IP adress to the IP of your RASPBERRY PI
-sock.bind(("169.254.165.78",8008))
+sock.bind(("RASP PI IP ADDRESS",8008))
 
 #ESC initialization
 pi.set_servo_pulsewidth(pin[0], 1500)
@@ -40,10 +45,10 @@ def make8bit(number):
     return number
 
 def remap(number):
-    if number == 128:
+    if dir[number] == 128:
         return 0
     else:
-        return (((number - 128) * 500)/128)*gain
+        return (((dir[number] - 128) * 500)/128)*gain[number]
     
 #main loop
 while True:
@@ -72,10 +77,10 @@ while True:
                 dir[0]=ord(data[0])
                 dir[1]=ord(data[1])
                 dir[2]=ord(data[2])
-        #motor power distribution (to be done!!!)
-        motor[0] += (remap(dir[0]) - remap(dir[1]))/2 #left motor
-        motor[1] += (-remap(dir[0]) - remap(dir[1]))/2 #right motor
-        motor[2] += remap(dir[2])                     #vertical
+        #motor power distribution
+        motor[0] += (remap(0) - remap(1))/2  #left motor
+        motor[1] += (-remap(0) - remap(1))/2 #right motor
+        motor[2] += remap(2)                 #vertical
         setMotor(0,motor[0])
         setMotor(1,motor[1])
         setMotor(2,motor[2])
