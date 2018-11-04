@@ -35,7 +35,7 @@ MainWindow::MainWindow(QWidget *parent) :
     }
 
     m_gamepad = new QGamepad(*gamepads.begin(), this);
-    connect(m_gamepad, &QGamepad::axisLeftXChanged, this, [&](double value){//turn
+    connect(m_gamepad, &QGamepad::axisRightYChanged, this, [&](double value){//turn
         dir[1] = format(value);
         ui->lr->setText(QString::number(dir[1]));
     });
@@ -43,11 +43,11 @@ MainWindow::MainWindow(QWidget *parent) :
         dir[2] = format(value);
         ui->ud->setText(QString::number(dir[2]));
     });
-    connect(m_gamepad, &QGamepad::axisRightYChanged, this, [&](double value){//fwdbwd
+    connect(m_gamepad, &QGamepad::axisLeftXChanged, this, [&](double value){//fwdbwd
         dir[0] = format(value);
         ui->fb->setText(QString::number(dir[0]));
     });
-    connect(m_gamepad, &QGamepad::buttonUpChanged, this, [&](bool pressed){//up with aktiv ROV
+/*    connect(m_gamepad, &QGamepad::buttonUpChanged, this, [&](bool pressed){//up with aktiv ROV
         if (pressed){
             uint8_t in = ui->activeROV->currentIndex();
             if (in != 0){
@@ -62,7 +62,7 @@ MainWindow::MainWindow(QWidget *parent) :
                 ui->activeROV->setCurrentIndex(in+1);
             }
         }
-    });
+    })*/;
     connect(m_gamepad, &QGamepad::buttonGuideChanged, this, [&](bool pressed){//disarm
         if (pressed){
             DA = !DA;
@@ -92,38 +92,39 @@ uint8_t MainWindow::format(double x){
 
 void MainWindow::sendData(){
     QHostAddress receiver;
-    switch (ui->activeROV->currentIndex()){
-        case 0:
-            receiver.setAddress("169.254.184.178");
-            break;
-        case 1:
-            receiver.setAddress("169.254.59.45");
-            break;
-        case 2:
-            receiver.setAddress("169.254.112.186");
-            break;
-        case 3:
-            receiver.setAddress("169.254.165.103");
-            break;
-        case 4:
-            receiver.setAddress("169.254.179.86");
-            break;
-        case 5:
-            receiver.setAddress("169.254.70.218");
-            break;
-        case 6:
-            receiver.setAddress("169.254.165.78");
-            break;
-        case 7:
-            receiver.setAddress("169.254.7.56");
-            break;
-        case 8:
-            receiver.setAddress("169.254.70.122");
-            break;
-        case 9:
-            receiver.setAddress("169.254.242.224");
-            break;
-    }
+    receiver.setAddress("169.254.112.186");
+//    switch (ui->activeROV->currentIndex()){
+//        case 0:
+//            receiver.setAddress("169.254.184.178");
+//            break;
+//        case 1:
+//            receiver.setAddress("169.254.59.45");
+//            break;
+//        case 2:
+//            receiver.setAddress("169.254.112.186");
+//            break;
+//        case 3:
+//            receiver.setAddress("169.254.165.103");
+//            break;
+//        case 4:
+//            receiver.setAddress("169.254.179.86");
+//            break;
+//        case 5:
+//            receiver.setAddress("169.254.70.218");
+//            break;
+//        case 6:
+//            receiver.setAddress("169.254.165.78");
+//            break;
+//        case 7:
+//            receiver.setAddress("169.254.7.56");
+//            break;
+//        case 8:
+//            receiver.setAddress("169.254.70.122");
+//            break;
+//        case 9:
+//            receiver.setAddress("169.254.242.224");
+//            break;
+//    }
     msg[0]=dir[0];
     msg[1]=dir[1];
     msg[2]=dir[2];
