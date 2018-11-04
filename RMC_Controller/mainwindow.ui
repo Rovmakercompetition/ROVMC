@@ -44,9 +44,9 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>10</y>
+      <y>20</y>
       <width>241</width>
-      <height>150</height>
+      <height>131</height>
      </rect>
     </property>
     <layout class="QFormLayout" name="formLayout">
@@ -120,8 +120,20 @@
      </item>
      <item row="4" column="0" colspan="2">
       <widget class="QPushButton" name="camButton">
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="layoutDirection">
+        <enum>Qt::LeftToRight</enum>
+       </property>
        <property name="text">
         <string>Tænd kamera</string>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>16</width>
+         <height>16</height>
+        </size>
        </property>
       </widget>
      </item>
